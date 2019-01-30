@@ -63,6 +63,39 @@ namespace CRUD_Core_Ajax.Controllers
             return new JsonResult(null);
         }
 
+        [HttpPost]
+        // POST: Adding Multiple Data with AJAX
+        public JsonResult AddMultipleData([FromBody] string[][] booksArray)
+        {
+            if (booksArray != null && booksArray.Length > 0)
+            {
+                List<Book> books = new List<Book>();
+                for (int i = 0; i < booksArray.Length; i++)
+                {
+                    Book stu = new Book
+                    {
+                        Name = booksArray[i][0],
+                        ISBN = booksArray[i][1],
+                        Author = booksArray[i][2]
+                    };
+                    books.Add(stu);
+                    books.TrimExcess();
+                }
+
+                List<Book> oldBooksList;
+
+                using (_db)
+                {
+                    oldBooksList = (from s in _db.Books select s).ToList();
+                    books.RemoveAll(x => oldBooksList.Exists(y => y.Name == x.Name || y.ISBN == x.ISBN));
+                    _db.Books.AddRange(books);
+                    _db.SaveChanges();
+                }
+
+                return new JsonResult(new { success = true, responseText = "New Data added to Database Successfully!" });
+            }
+            return new JsonResult(new { success = false, responseText = "Something Went Wrong!" });
+        }
 
         public IActionResult Privacy()
         {

@@ -10,9 +10,27 @@ namespace CRUD_Core_Ajax.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext _db;
+
+        public HomeController(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
         public IActionResult Index()
         {
             return View();
+        }
+
+        // GET: Fetching Data for AJAX Call
+        public IActionResult GetData()
+        {
+            List<Book> books;
+            using (_db)
+            {
+                books = _db.Books.ToList();
+            }
+            return new JsonResult(books);
         }
 
         public IActionResult Privacy()

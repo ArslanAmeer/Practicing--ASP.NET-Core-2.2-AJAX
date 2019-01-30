@@ -19,9 +19,27 @@
         <label for="author">Author Name</label>
         <input type="text" class="form-control" id="author" placeholder="Enter Author Name">
     </div>
-    <button id="addData" class="btn btn-info btn-sm">Add Data</button>
-</div>
+    <div class="btn-group-sm">
 
+        <button id="submit" type="submit" class="btn btn-primary">Add To Table</button>
+        <button id="update" type="submit" class="btn btn-primary" style="display: none">Update Data</button>
+        <button id="clear" type="button" class="btn btn-default" style="display: none">Cancel</button>
+        <button id="addData" class="btn btn-info btn-sm">Add Data</button>
+        <button id="addToDb" type="submit" class="btn btn-info">Add Multiple Data</button>
+    </div>
+</div>
+<table id="tempTable" class="table table-striped table-bordered table-sm text-center">
+    <thead class="table-dark">
+        <tr>
+            <td>Name</td>
+            <td>ISBN</td>
+            <td>Author</td>
+            <td>Actions</td>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<hr />
 <table id="booksTable" class="table table-striped table-bordered table-sm text-center">
     <thead class="table-dark">
         <tr>
@@ -39,6 +57,14 @@
 
         $(document).ready(() => {
             GetData();
+            $("#addData").click(() => {
+                debugger;
+                var book = new Object();
+                book.Name = $("#name").val();
+                book.ISBN = $("#isbn").val();
+                book.Author = $("#author").val();
+                AddData(book);
+            });
         });
 
         function GetData() {
@@ -95,6 +121,32 @@
                 });
             }
 
+        }
+
+        function AddData(book) {
+            $.ajax({
+                url: "/Home/AddData/",
+                type: "POST",
+                data: JSON.stringify(book),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    debugger;
+                    if (response != null) {
+                        GetData();
+                        $("input[type=text]").val("");
+
+                    } else {
+                        alert("Something went wrong");
+                    }
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
         }
 
     </script>

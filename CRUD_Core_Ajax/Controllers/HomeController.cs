@@ -33,7 +33,7 @@ namespace CRUD_Core_Ajax.Controllers
             return new JsonResult(books);
         }
 
-        //GET: Delete Data from AJAX Call
+        // GET: Delete Data from AJAX Call
         public async Task<IActionResult> DeleteData(int bookId)
         {
             Book book;
@@ -46,6 +46,23 @@ namespace CRUD_Core_Ajax.Controllers
 
             return new JsonResult(book);
         }
+
+        [HttpPost]
+        // POST: Adding Data with AJAX
+        public async Task<IActionResult> AddData([FromBody]Book book)
+        {
+            using (_db)
+            {
+                if (book != null)
+                {
+                    await _db.Books.AddAsync(book);
+                    _db.SaveChanges();
+                    return new JsonResult(book);
+                }
+            }
+            return new JsonResult(null);
+        }
+
 
         public IActionResult Privacy()
         {

@@ -33,6 +33,20 @@ namespace CRUD_Core_Ajax.Controllers
             return new JsonResult(books);
         }
 
+        //GET: Delete Data from AJAX Call
+        public async Task<IActionResult> DeleteData(int bookId)
+        {
+            Book book;
+            using (_db)
+            {
+                book = await _db.Books.FindAsync(bookId);
+                _db.Books.Remove(book);
+                await _db.SaveChangesAsync();
+            }
+
+            return new JsonResult(book);
+        }
+
         public IActionResult Privacy()
         {
             return View();

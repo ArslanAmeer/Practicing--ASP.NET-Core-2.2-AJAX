@@ -6,6 +6,22 @@
     <h1 class="display-4">Welcome</h1>
 </div>
 
+<div class="jumbotron">
+    <div class="form-group">
+        <label for="name">Book Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter Book Name">
+    </div>
+    <div class="form-group">
+        <label for="isbn">ISBN</label>
+        <input type="text" class="form-control" id="isbn" placeholder="ISBN Number">
+    </div>
+    <div class="form-group">
+        <label for="author">Author Name</label>
+        <input type="text" class="form-control" id="author" placeholder="Enter Author Name">
+    </div>
+    <button id="addData" class="btn btn-info btn-sm">Add Data</button>
+</div>
+
 <table id="booksTable" class="table table-striped table-bordered table-sm text-center">
     <thead class="table-dark">
         <tr>
@@ -59,6 +75,26 @@
                     console.log(errormessage.responseText);
                 }
             });
+        }
+
+        function DeleteData(bookId) {
+
+            var sure = confirm("Do You Want To Delete This Record?");
+
+            if (sure) {
+                $.ajax({
+                    url: "/Home/DeleteData/?bookId=" + bookId,
+                    type: "GET",
+                    cache: false,
+                    success: function (result) {
+                        GetData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+
         }
 
     </script>

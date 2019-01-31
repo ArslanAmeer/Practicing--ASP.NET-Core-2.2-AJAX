@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="jumbotron">
+
+    <h4 class="display-4 text-center">Passing Complex Data</h4>
+    <hr />
+
+    @*  Owner Input Field *@
+
+    <div class="row">
+        <div class="form-group col-6">
+            <label for="ownerName">Owner Name</label>
+            <input type="text" name="ownerName" id="ownerName" class="form-control" />
+        </div>
+        <div class="form-group col-6">
+            <label for="phone">Phone Number</label>
+            <input type="text" name="phone" id="phone" class="form-control" />
+        </div>
+    </div>
+
+    @*  Buttons TO Add Owner Data And Add a Car *@
+
+    <div class="row justify-content-center">
+        <button id="addCar" class="btn btn-info btn-sm justify-content-center">Add Car</button> &nbsp;&nbsp;
+        <button id="addOwner" class="btn btn-primary btn-sm justify-content-center">Save Owner Data</button>
+    </div>
+    <br />
+
+    @* Temporary Table of Added Car to Owner *@
+
+    <div id="tempCar" style="display: none" class="text-center">
+        <table id="tempTable" class="table table-sm">
+            <thead class="table-primary">
+                <tr>
+                    <td>Car Name</td>
+                    <td>Model Name</td>
+                    <td>Action</td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <br />
+    </div>
+
+    @* Car Input Field *@
+
+    <div id="carDetail" class="row">
+        <div class="form-group col-6">
+            <label for="carName">Car Name</label>
+            <input type="text" name="carName" id="carName" class="form-control" />
+        </div>
+        <div class="form-group col-6">
+            <label for="model">Model Name</label>
+            <input type="text" name="model" id="model" class="form-control" />
+        </div>
+        <button id="addCarToOwner" class="btn btn-primary btn-block">Add Car To Owner</button>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $(document).ready(() => {
+            $("#carDetail").hide();
+            $("#addCar").click(() => {
+                $("#carDetail").fadeToggle();
+            });
+            $("#addCarToOwner").click(() => {
+                AddTempData();
+            });
+        });
+
+        function AddTempData() {
+
+            var carName = $("#carName").val();
+            var model = $("#model").val();
+            $("#tempCar").show();
+            var addHtml = " <tr><td>" +
+                carName +
+                "</td><td>" +
+                model +
+                "</td><td> <a id='remove' href='#' onclick='RemoveTempData(this)'>Remove</a>";
+            $("#tempTable > tbody").append(addHtml);
+
+        }
+
+        function RemoveTempData(data) {
+            if (confirm('You Want to remove?')) {
+                $(data).parents('tr').remove();
+                var tRows = $("#tempTable >tbody tr");
+                if (tRows.length <= 0) {
+                    $("#tempCar").hide();
+                }
+            }
+
+        }
+    </script>
+}

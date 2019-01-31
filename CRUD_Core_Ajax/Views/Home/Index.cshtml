@@ -7,6 +7,7 @@
 </div>
 
 <div class="jumbotron">
+    <input type="number" id="bookId" class="form-control" placeholder="Id" disabled="disabled" style="display: none" />
     <div class="form-group">
         <label for="name">Book Name</label>
         <input type="text" class="form-control" id="name" placeholder="Enter Book Name">
@@ -59,7 +60,6 @@
             GetData();
             $("#addToDb").prop("disabled", true);
             $("#addData").click(() => {
-                debugger;
                 var book = new Object();
                 book.Name = $("#name").val();
                 book.ISBN = $("#isbn").val();
@@ -73,13 +73,28 @@
                     $("#isbn").val("");
                     $("#author").val("");
                 } else {
-                    alert("Eneter Data First");
+                    alert("Enter Data First");
                 }
 
             });
             $("#addToDb").click(() => {
                 var tRow = tempTableDataArry();
                 AddNewTableData(tRow);
+            });
+            $("#update").click(() => {
+                var book = new Object();
+                book.Id = $("#bookId").val();
+                book.Name = $("#name").val();
+                book.ISBN = $("#isbn").val();
+                book.Author = $("#author").val();
+                UpdateData(book);
+            });
+            $("#clear").click(() => {
+                $("#update").hide();
+                $("#submit").show();
+                $("#addToDb").show();
+                $("input[type=text]").val("");
+                $("#clear").hide();
             });
         });
 
@@ -147,7 +162,6 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    debugger;
                     if (response != null) {
                         GetData();
                         $("input[type=text]").val("");
@@ -192,6 +206,51 @@
                 });
         }
 
+        // UPDATE data with AJAX ------------------------
+
+        function EditData(data) {
+            var id = $(data).closest('tr').attr('id');
+            var name = $(data).closest('tr').find('td:eq(0)').text();
+            var isbn = $(data).closest('tr').find('td:eq(1)').text();
+            var author = $(data).closest('tr').find('td:eq(2)').text();
+            $("#bookId").val(id);
+            $("#name").val(name);
+            $("#isbn").val(isbn);
+            $("#author").val(author);
+            $("#update").show().after('');
+            $("#submit").hide();
+            $("#addToDb").hide();
+            $("#clear").show();
+            $('html, body').animate({
+                scrollTop: $(".jumbotron").offset().top
+            }, 500);
+        }
+
+        function UpdateData(book) {
+            if (book != null) {
+                $.ajax({
+                    url: '/Home/UpdateData/',
+                    type: "POST",
+                    data: JSON.stringify(book),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        GetData();
+                        $("#clear").hide();
+                        $("#update").hide();
+                        $("#submit").show();
+                        $("#addToDb").show();
+                        $("input[type=text]").val("");
+                    },
+                    failure: function (response) {
+                        alert("Failed To Save Data");
+                    },
+                    error: function (response) {
+                        alert("Something Bad Happened");
+                    }
+                });
+            }
+        }
 
         // TEMPORARY Data Added to Table Before Adding them to Database ------------------------
 

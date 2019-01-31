@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using CRUD_Core_Ajax.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRUD_Core_Ajax.Controllers
 {
@@ -95,6 +96,27 @@ namespace CRUD_Core_Ajax.Controllers
                 return new JsonResult(new { success = true, responseText = "New Data added to Database Successfully!" });
             }
             return new JsonResult(new { success = false, responseText = "Something Went Wrong!" });
+        }
+
+        [HttpPost]
+        // POST: Updateing Data with AJAX
+        public async Task<IActionResult> UpdateData([FromBody] Book book)
+        {
+            Book oldBook = _db.Books.Find(book.Id);
+
+            if (oldBook != null)
+            {
+                oldBook.Name = book.Name;
+                oldBook.ISBN = book.ISBN;
+                oldBook.Author = book.Author;
+                using (_db)
+                {
+                    _db.Entry(oldBook).State = EntityState.Modified;
+                    await _db.SaveChangesAsync();
+                }
+                return new JsonResult(book);
+            }
+            return new JsonResult("error");
         }
 
         public IActionResult Privacy()

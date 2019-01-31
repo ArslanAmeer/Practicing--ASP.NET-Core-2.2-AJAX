@@ -300,15 +300,15 @@
         }
 
         function tempTableDataArry() {
-            var studentArray = [];
+            var booksArray = [];
             $("#tempTable").find("tbody").find("tr").each(function () {
                 var tempRow = [];
                 tempRow[0] = $(this).find('td:eq(0)').text(); // Name
                 tempRow[1] = $(this).find('td:eq(1)').text(); // ISBN
                 tempRow[2] = $(this).find('td:eq(2)').text(); // Author
-                studentArray.push(tempRow);
+                booksArray.push(tempRow);
             });
-            return studentArray;
+            return booksArray;
         }
     </script>
 }

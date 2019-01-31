@@ -15,6 +15,7 @@ namespace CRUD_Core_Ajax.Models
 
         public DbSet<Book> Books { get; set; }
 
+        public DbSet<Owner> Owners { get; set; }
 
     }
 }

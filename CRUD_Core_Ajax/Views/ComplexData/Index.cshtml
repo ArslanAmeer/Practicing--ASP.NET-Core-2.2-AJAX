@@ -59,7 +59,7 @@
         <button id="addCarToOwner" class="btn btn-primary btn-block">Add Car To Owner</button>
     </div>
 </div>
-
+<button id="click" class="btn btn-sm btn-link">click</button>
 @section Scripts{
     <script type="text/javascript">
 
@@ -70,8 +70,49 @@
             });
             $("#addCarToOwner").click(() => {
                 AddTempData();
+                $("#carName").val("");
+                $("#model").val("");
             });
+            $("#addOwner").click(() => {
+                var fullOwnerData = GetOwnerData();
+                AddMultipleData(fullOwnerData);
+            });
+
         });
+
+        function AddMultipleData(fullOwnerData) {
+            debugger;
+            var url = "/ComplexData/AddComplexData/";
+            $.ajax(
+                {
+                    url: url,
+                    type: "POST",
+                    data: JSON.stringify(fullOwnerData),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        debugger;
+                        if (response.success) {
+                            $("#tempTable").find("tbody").find("tr").remove();
+                            $("#tempCar").hide();
+                            $("input").val("");
+                        } else {
+                            alert(response.responseText);
+                        }
+                    },
+                    error: function (response) {
+                        alert("ERROR");
+                    }
+                });
+        }
+
+        function GetOwnerData() {
+            var owner = new Object();
+            owner.Name = $("#ownerName").val();
+            owner.Phone = $("#phone").val();
+            owner.Cars = tempTableDataArry();
+            return owner;
+        }
 
         function AddTempData() {
 
@@ -97,5 +138,17 @@
             }
 
         }
+
+        function tempTableDataArry() {
+            var carsArray = [];
+            $("#tempTable").find("tbody").find("tr").each(function () {
+                var tempRow = new Object();
+                tempRow.Name = $(this).find('td:eq(0)').text(); // Name
+                tempRow.ModelName = $(this).find('td:eq(1)').text(); // Model
+                carsArray.push(tempRow);
+            });
+            return carsArray;
+        }
+
     </script>
 }

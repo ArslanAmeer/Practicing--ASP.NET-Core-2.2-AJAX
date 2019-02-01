@@ -77,7 +77,9 @@
                 var fullOwnerData = GetOwnerData();
                 AddMultipleData(fullOwnerData);
             });
-
+            $("#click").click(() => {
+                AddListOfComplexData();
+            });
         });
 
         function AddMultipleData(fullOwnerData) {
@@ -149,6 +151,61 @@
             });
             return carsArray;
         }
+
+        // Array of Complex Data
+        function AddListOfComplexData() {
+            debugger;
+            var owners = [];
+            var cars = [];
+
+            var owner = new Object();
+            owner.Name = "Arslan";
+            owner.Phone = "321654";
+
+            var car = new Object;
+            car.Name = "Honda";
+            car.ModelName = "City";
+
+            cars.push(car);
+            owner.Cars = cars;
+            owners.push(owner);
+
+            var owner2 = new Object();
+            owner2.Name = "Usman";
+            owner2.Phone = "654987";
+
+            var car2 = new Object();
+            car2.Name = "Toyota";
+            car2.ModelName = "Corolla";
+
+            cars.push(car2);
+            owner2.Cars = cars;
+            owners.push(owner2);
+
+            console.dir(owners);
+
+            var url = "/ComplexData/AddListOfComplexData/";
+            $.ajax(
+                {
+                    url: url,
+                    type: "POST",
+                    data: JSON.stringify(owners),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        debugger;
+                        if (response.success) {
+                            alert("Arry Of Complex Data Passed Successfully");
+                        } else {
+                            alert("Failed To Fetch Data");
+                        }
+                    },
+                    error: function (response) {
+                        alert("ERROR");
+                    }
+                });
+        }
+
 
     </script>
 }

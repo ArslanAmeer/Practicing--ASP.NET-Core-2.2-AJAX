@@ -41,5 +41,15 @@ namespace CRUD_Core_Ajax.Controllers
 
         }
 
+
+        public IActionResult AddListOfComplexData([FromBody] List<Owner> owner)
+        {
+            List<Owner> newList = owner;
+            if (newList != null)
+            {
+                return new JsonResult(new { success = true });
+            }
+            return new JsonResult(new { success = false });
+        }
     }
 }

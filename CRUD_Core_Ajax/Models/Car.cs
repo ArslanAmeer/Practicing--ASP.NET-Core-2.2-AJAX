@@ -12,5 +12,8 @@ namespace CRUD_Core_Ajax.Models
         public string Name { get; set; }
 
         public string ModelName { get; set; }
+
+        public City City { get; set; }
+
     }
 }

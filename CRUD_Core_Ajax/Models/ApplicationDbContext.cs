@@ -17,5 +17,7 @@ namespace CRUD_Core_Ajax.Models
 
         public DbSet<Owner> Owners { get; set; }
 
+        public DbSet<City> Cities { get; set; }
+
     }
 }

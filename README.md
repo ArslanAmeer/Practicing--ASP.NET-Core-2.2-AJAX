@@ -12,9 +12,33 @@
 
 ---
 
-### Demo in Motion: 😉
+## 1️⃣ Demo in Motion <u>**(Basic CRUD with AJAX)**</u>: 😉
+
+### _CRUD Ajax in .Net Core Mvc. First added data to Temp table then on click save all temp data to DataBase._
 
 ![](coreCRUDAJAXdemo.gif)
+
+---
+
+---
+
+## 2️⃣ Demo in Motion <u>**(Saving Complex Data with AJAX)**</u>: 😉
+
+### _Saving Complex Data (Parent > Child Relation) to Database over AJAX in .Net Core MVC._
+
+(Open "local.../ComplexData" url to Open ComplexData Action View)
+
+![](complexDataAJAXdemo.gif)
+
+---
+
+## 3️⃣ Demo in Motion <u>**(Passing List Of Complex Data with AJAX)**</u>: 😉
+
+### _Passing List Of Complex Data with Nested/Multiple Foreign Key Relation to Database over AJAX to Action Successfully in .Net Core MVC._
+
+(A link with name "CLICK" was at bottom of page which on click send request and pass data to Action)
+
+![](listOfComplexData.gif)
 
 ---
 

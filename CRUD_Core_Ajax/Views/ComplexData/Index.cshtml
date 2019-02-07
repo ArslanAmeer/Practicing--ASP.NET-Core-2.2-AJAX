@@ -37,6 +37,7 @@
                 <tr>
                     <td>Car Name</td>
                     <td>Model Name</td>
+                    <td>Registered City</td>
                     <td>Action</td>
                 </tr>
             </thead>
@@ -48,37 +49,55 @@
     @* Car Input Field *@
 
     <div id="carDetail" class="row">
-        <div class="form-group col-6">
+        <div class="form-group col-4">
             <label for="carName">Car Name</label>
             <input type="text" name="carName" id="carName" class="form-control" />
         </div>
-        <div class="form-group col-6">
+        <div class="form-group col-4">
             <label for="model">Model Name</label>
             <input type="text" name="model" id="model" class="form-control" />
+        </div>
+        <div class="form-group col-4">
+            <label for="cityList">Registered City</label>
+            <select id="cityList" class="form-control text-center">
+                <option>- Select City -</option>
+            </select>
         </div>
         <button id="addCarToOwner" class="btn btn-primary btn-block">Add Car To Owner</button>
     </div>
 </div>
 <button id="click" class="btn btn-sm btn-link">click</button>
+<button id="getCityVal" class="btn btn-sm btn-link">GetCityVal</button>
 @section Scripts{
     <script type="text/javascript">
 
         $(document).ready(() => {
+
+            GetCities();
+
             $("#carDetail").hide();
+
             $("#addCar").click(() => {
                 $("#carDetail").fadeToggle();
             });
+
             $("#addCarToOwner").click(() => {
                 AddTempData();
                 $("#carName").val("");
                 $("#model").val("");
             });
+
             $("#addOwner").click(() => {
                 var fullOwnerData = GetOwnerData();
                 AddMultipleData(fullOwnerData);
             });
+
             $("#click").click(() => {
                 AddListOfComplexData();
+            });
+
+            $("#getCityVal").click(() => {
+                console.log($("#cityList").val());
             });
         });
 
@@ -120,11 +139,17 @@
 
             var carName = $("#carName").val();
             var model = $("#model").val();
+            var city = $("#cityList option:selected").text();
+            var cityId = $("#cityList").val();
             $("#tempCar").show();
             var addHtml = " <tr><td>" +
                 carName +
                 "</td><td>" +
                 model +
+                "</td><td style='display:none'>" +
+                cityId +
+                "</td><td>" +
+                city +
                 "</td><td> <a id='remove' href='#' onclick='RemoveTempData(this)'>Remove</a>";
             $("#tempTable > tbody").append(addHtml);
 
@@ -142,11 +167,15 @@
         }
 
         function tempTableDataArry() {
+            debugger;
             var carsArray = [];
             $("#tempTable").find("tbody").find("tr").each(function () {
                 var tempRow = new Object();
                 tempRow.Name = $(this).find('td:eq(0)').text(); // Name
                 tempRow.ModelName = $(this).find('td:eq(1)').text(); // Model
+                var city = new Object();
+                city.Id = $(this).find('td:eq(2)').text(); // Selected City Value
+                tempRow.City = city;
                 carsArray.push(tempRow);
             });
             return carsArray;
@@ -166,6 +195,10 @@
             car.Name = "Honda";
             car.ModelName = "City";
 
+            var city = new Object();
+            city.Id = 1;
+            car.City = city;
+
             cars.push(car);
             owner.Cars = cars;
             owners.push(owner);
@@ -177,6 +210,10 @@
             var car2 = new Object();
             car2.Name = "Toyota";
             car2.ModelName = "Corolla";
+
+            var city2 = new Object();
+            city2.Id = 4;
+            car2.City = city2;
 
             cars.push(car2);
             owner2.Cars = cars;
@@ -197,7 +234,7 @@
                         if (response.success) {
                             alert("Arry Of Complex Data Passed Successfully");
                         } else {
-                            alert("Failed To Fetch Data");
+                            alert("Failed To Pass Data");
                         }
                     },
                     error: function (response) {
@@ -206,6 +243,23 @@
                 });
         }
 
+        // Getting List of Cities
+
+        function GetCities() {
+            $.ajax({
+                url: "ComplexData/GetCities/",
+                type: "GET",
+                success: (result) => {
+                    console.dir(result);
+                    var html = "";
+                    $.each(result, function (index, item) {
+                        html += "<option value='" + item.id + "' >" + item.name + "</option>";
+                    });
+                    $("#cityList").append(html);
+                    console.log(html);
+                }
+            });
+        }
 
     </script>
 }

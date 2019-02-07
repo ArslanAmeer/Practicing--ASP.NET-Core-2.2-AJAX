@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CRUD_Core_Ajax.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace CRUD_Core_Ajax.Controllers
@@ -28,6 +29,11 @@ namespace CRUD_Core_Ajax.Controllers
             {
                 using (_db)
                 {
+                    foreach (var t in owner.Cars)
+                    {
+                        _db.Entry(t.City).State = EntityState.Unchanged;
+                    }
+
                     await _db.Owners.AddAsync(owner);
                     await _db.SaveChangesAsync();
                 }
@@ -51,5 +57,14 @@ namespace CRUD_Core_Ajax.Controllers
             }
             return new JsonResult(new { success = false });
         }
+
+        public List<City> GetCities()
+        {
+            using (_db)
+            {
+                return _db.Cities.ToList();
+            }
+        }
+
     }
 }

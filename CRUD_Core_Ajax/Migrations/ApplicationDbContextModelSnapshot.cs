@@ -43,6 +43,8 @@ namespace CRUD_Core_Ajax.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CityId");
+
                     b.Property<string>("ModelName");
 
                     b.Property<string>("Name");
@@ -51,9 +53,24 @@ namespace CRUD_Core_Ajax.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CityId");
+
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Car");
+                });
+
+            modelBuilder.Entity("CRUD_Core_Ajax.Models.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("CRUD_Core_Ajax.Models.Owner", b =>
@@ -74,6 +91,10 @@ namespace CRUD_Core_Ajax.Migrations
 
             modelBuilder.Entity("CRUD_Core_Ajax.Models.Car", b =>
                 {
+                    b.HasOne("CRUD_Core_Ajax.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId");
+
                     b.HasOne("CRUD_Core_Ajax.Models.Owner")
                         .WithMany("Cars")
                         .HasForeignKey("OwnerId");
